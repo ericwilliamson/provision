@@ -27,7 +27,7 @@ def provision(platform, inventory_location, vars)
               Net::HTTP::Post.new(uri.request_uri, headers)
             end
   reply = http.request(request)
-puts "reply = #{reply}
+puts "reply = #{reply}"
   raise "Error: #{reply}: #{reply.message}" unless reply.is_a?(Net::HTTPSuccess)
 
   data = JSON.parse(reply.body)
