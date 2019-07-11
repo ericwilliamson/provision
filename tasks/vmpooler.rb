@@ -27,9 +27,11 @@ def provision(platform, inventory_location, vars)
               Net::HTTP::Post.new(uri.request_uri, headers)
             end
   reply = http.request(request)
+puts "reply = #{reply}
   raise "Error: #{reply}: #{reply.message}" unless reply.is_a?(Net::HTTPSuccess)
 
   data = JSON.parse(reply.body)
+puts "data = #{data}"
   raise "VMPooler is not ok: #{data.inspect}" unless data['ok'] == true
 
   hostname = "#{data[platform]['hostname']}.#{data['domain']}"
@@ -91,6 +93,7 @@ raise 'specify a node_name if tearing down' if action == 'tear_down' && node_nam
 raise 'specify a platform if provisioning' if action == 'provision' && platform.nil?
 
 begin
+  puts "action = #{action}"
   result = provision(platform, inventory_location, vars) if action == 'provision'
   result = tear_down(node_name, inventory_location) if action == 'tear_down'
   puts result.to_json
@@ -98,6 +101,6 @@ begin
 rescue => e
   puts e
   puts caller
-  puts({ _error: { kind: 'facter_task/failure', msg: e.message } }.to_json)
+  puts({ _error: { kind: 'facter_task/failure', msg: "#{e}, #{caller}, #{e.message} } }.to_json)
   exit 1
 end
