@@ -101,6 +101,6 @@ begin
 rescue => e
   puts e
   puts caller
-  puts({ _error: { kind: 'facter_task/failure', msg: "#{e}, #{caller}, #{e.message} } }.to_json)
+  puts({ _error: { kind: 'facter_task/failure', msg: "#{e}, #{caller}, #{e.message}" } }.to_json)
   exit 1
 end
